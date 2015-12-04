@@ -11,6 +11,29 @@ namespace TreeSharp
         static void Main(string[] args)
         {
 
+
+
+            List<ConsoleColor> ornamentColors = new List<ConsoleColor>();
+
+            ornamentColors.Add(ConsoleColor.Red);
+            ornamentColors.Add(ConsoleColor.Blue);
+            ornamentColors.Add(ConsoleColor.White);
+            ornamentColors.Add(ConsoleColor.Yellow);
+
+            List<char> ornaments = new List<char>();
+
+            ornaments.Add('*');
+            ornaments.Add('@');
+            ornaments.Add('0');
+            ornaments.Add('O');
+            ornaments.Add('o');
+
+            ConsoleColor treeColor = ConsoleColor.Green;
+            ConsoleColor backgroundColor = ConsoleColor.Black;
+
+            Console.BackgroundColor = backgroundColor;
+            Console.ForegroundColor = treeColor;
+
             Console.Clear();
 
             int height = Console.WindowHeight;
@@ -24,23 +47,6 @@ namespace TreeSharp
 
             Console.CursorVisible = false;
 
-            List<ConsoleColor> ornamentColors = new List<ConsoleColor>();
-
-            ornamentColors.Add(ConsoleColor.Red);
-            ornamentColors.Add(ConsoleColor.Blue);
-            ornamentColors.Add(ConsoleColor.White);
-            ornamentColors.Add(ConsoleColor.Yellow);
-
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.ForegroundColor = ConsoleColor.Green;
-            /*for (int h = 0; h < height; h++)
-            {
-                for(int w = 0; w < width; w++)
-                {
-                    Console.Write("*");
-                }
-            }*/
-
             int treeHeight = 4;
             int treeWidth = 1;
 
@@ -50,9 +56,33 @@ namespace TreeSharp
                 {
                     Console.Write(" ");
                 }
+                bool previousIsOrnament = false;
                 for (int i = 0; i < treeWidth; i++)
                 {
-                    Console.Write("*");
+                    // Using a guid as a seed makes random seem more random, not so based on time.
+                    Random isOrnament = new Random(Guid.NewGuid().GetHashCode());
+                    if(i !=0 && i != treeWidth -1 && isOrnament.Next(3) == 0 && !previousIsOrnament)
+                    {
+                        int ornamentIndex = isOrnament.Next(ornaments.Count);
+                        Console.ForegroundColor = ornamentColors[isOrnament.Next(ornamentColors.Count)];
+                        Console.Write(ornaments[ornamentIndex]);
+                        Console.ForegroundColor = treeColor;
+                        previousIsOrnament = true;
+                    }
+                    else if(i < treeWidth/2)
+                    {
+                        Console.Write('>');
+                        previousIsOrnament = false;
+                    }
+                    else
+                    {
+                        Console.Write('<');
+                        previousIsOrnament = false;
+                    }
+                }
+                for (int i = 0; i < (width / 2) - (treeWidth / 2); i++)
+                {
+                    Console.Write(" ");
                 }
                 Console.WriteLine("");
                 treeHeight++;
@@ -66,12 +96,22 @@ namespace TreeSharp
             {
                 Console.Write(" ");
             }
-            Console.WriteLine("|   |");
+            Console.Write("|   |");
             for (int i = 0; i < (width / 2) - (5 / 2); i++)
             {
                 Console.Write(" ");
             }
-            Console.WriteLine("|   |");
+            Console.WriteLine("");
+            for (int i = 0; i < (width / 2) - (5 / 2); i++)
+            {
+                Console.Write(" ");
+            }
+            Console.Write("|   |");
+            for (int i = 0; i < (width / 2) - (5 / 2); i++)
+            {
+                Console.Write(" ");
+            }
+            Console.WriteLine("");
             for (int i = 0; i < (width / 2) - (5 / 2); i++)
             {
                 Console.Write("_");
