@@ -6,12 +6,26 @@ using System.Threading.Tasks;
 
 namespace TreeSharp
 {
+    class Ornament
+    {
+        public int Row { get; set; }
+        public int Column { get; set; }
+        public char OrnamentDisplay { get; set; }
+
+        public Ornament(int row, int column, char ornament)
+        {
+            this.Row = row;
+            this.Column = column;
+            this.OrnamentDisplay = ornament;
+        }
+    }
+
     class Program
     {
         static void Main(string[] args)
         {
 
-
+            // This is quite possible the worst code I've ever written.
 
             List<ConsoleColor> ornamentColors = new List<ConsoleColor>();
 
@@ -50,6 +64,8 @@ namespace TreeSharp
             int treeHeight = 4;
             int treeWidth = 1;
 
+            List<Ornament> ornamentLocations = new List<Ornament>();
+
             while (treeHeight < height && treeWidth < width)
             {
                 for (int i = 0; i < (width / 2) - (treeWidth / 2); i++)
@@ -61,13 +77,23 @@ namespace TreeSharp
                 {
                     // Using a guid as a seed makes random seem more random, not so based on time.
                     Random isOrnament = new Random(Guid.NewGuid().GetHashCode());
-                    if(i !=0 && i != treeWidth -1 && isOrnament.Next(3) == 0 && !previousIsOrnament)
+                    
+                    if(treeWidth == 1)
+                    {
+                        Console.ForegroundColor = ornamentColors[isOrnament.Next(ornamentColors.Count)];
+                        Console.Write('*');
+                        Console.ForegroundColor = treeColor;
+                        previousIsOrnament = true;
+                        ornamentLocations.Add(new Ornament(treeHeight - 4, i, '*'));
+                    }
+                    else if(i !=0 && i != treeWidth -1 && isOrnament.Next(3) == 0 && !previousIsOrnament)
                     {
                         int ornamentIndex = isOrnament.Next(ornaments.Count);
                         Console.ForegroundColor = ornamentColors[isOrnament.Next(ornamentColors.Count)];
                         Console.Write(ornaments[ornamentIndex]);
                         Console.ForegroundColor = treeColor;
                         previousIsOrnament = true;
+                        ornamentLocations.Add(new Ornament(treeHeight - 4, i, ornaments[ornamentIndex]));
                     }
                     else if(i < treeWidth/2)
                     {
@@ -135,7 +161,7 @@ namespace TreeSharp
                     Console.Write("J");
                 }
                 */
-                Console.ReadKey();
+             Console.ReadKey();
         }
     }
 }
